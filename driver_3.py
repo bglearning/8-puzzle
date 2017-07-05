@@ -33,6 +33,14 @@ class State:
     def __hash__(self):
         return hash(tuple(self.board))
 
+    def is_solvable(self):
+        inversion_count = 0
+        for i in range(len(self.board) - 1):
+            for j in range(i + 1, len(self.board)):
+                if self.board[i] and self.board[j] and self.board[i] > self.board[j]:
+                    inversion_count += 1
+        return inversion_count % 2 == 0
+
     def is_solved(self):
         return self.board == self.goal_state_board
 
@@ -95,13 +103,13 @@ class Output:
         self.max_ram_usage = 0.0
 
     def __str__(self):
-        return "path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {}\nmax_ram_usage: {}".format(self.cost_of_path,\
+        return "path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {:.8f}\nmax_ram_usage: {:.8f}".format(self.sequence,\
                 self.cost_of_path,\
                 self.nodes_expanded,\
                 self.search_depth,\
                 self.max_search_depth,\
                 self.running_time,\
-                self.max_ram_usage,\
+                self.max_ram_usage\
                 )
 
 def solve_bfs(state):
