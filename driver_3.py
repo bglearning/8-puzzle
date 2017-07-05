@@ -6,10 +6,10 @@ import time
 
 class Moves:
 
-    UP = 'UP'
-    DOWN = 'DOWN'
-    LEFT = 'LEFT'
-    RIGHT = 'RIGHT'
+    UP = 'Up'
+    DOWN = 'Down'
+    LEFT = 'Left'
+    RIGHT = 'Right'
 
 class State:
 
@@ -103,7 +103,7 @@ class Output:
         self.max_ram_usage = 0.0
 
     def __str__(self):
-        return "path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {:.8f}\nmax_ram_usage: {:.8f}".format(self.sequence,\
+        return "path_to_goal: {}\ncost_of_path: {}\nnodes_expanded: {}\nsearch_depth: {}\nmax_search_depth: {}\nrunning_time: {:.8f}\nmax_ram_usage: {:.8f}\n".format(self.sequence,\
                 self.cost_of_path,\
                 self.nodes_expanded,\
                 self.search_depth,\
