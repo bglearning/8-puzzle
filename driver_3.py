@@ -1,6 +1,5 @@
 import sys
 from math import sqrt
-from copy import deepcopy
 import resource
 import time
 
@@ -17,8 +16,8 @@ class State:
 
     def __init__(self, board=None, sequence=[]):
         self.board = board if board is not None else [i for i in range(9)]
-        self.goal_state_board = [i for i in range(len(self.board))]
         self.width = sqrt(len(self.board))
+        self.goal_state_board = [i for i in range(len(self.board))]
         self.hole_index = self.board.index(State.HOLE)
         self.sequence = sequence
 
@@ -32,6 +31,9 @@ class State:
 
     def __hash__(self):
         return hash(tuple(self.board))
+
+    def board_string(self):
+        return str(self.board)
 
     def is_solvable(self):
         inversion_count = 0
@@ -55,9 +57,9 @@ class State:
             yield Moves.RIGHT
 
     def generate_next_state(self, move):
-        new_sequence = deepcopy(self.sequence)
+        new_sequence = self.sequence[::]
         new_sequence.append(move)
-        next_state = State(deepcopy(self.board), new_sequence)
+        next_state = State(self.board[::], new_sequence)
         old_hole_index = next_state.hole_index
         if move == Moves.UP:
             new_hole_index = int(next_state.hole_index - next_state.width)
@@ -135,25 +137,31 @@ def solve_bfs(state):
 
 
 def solve_dfs(state):
-    checked_states = []
+    checked_states = {}
     states = []
+    states_dict = {}
     states.append(state)
+    states_dict[state.board_string()] = True
     max_search_depth = 0
     check_count = 0
     while True:
         if len(states) < 1:
             raise ValueError("No solution found for state:\n {}".format(state))
         check_state = states.pop()
-        checked_states.append(check_state)
+        del states_dict[check_state.board_string()]
+        checked_states[check_state.board_string()] = True
         if check_state.is_solved():
             return Output(check_state.sequence, check_count, max_search_depth)
         check_count += 1
         for state in reversed(list(check_state.generate_possible_states())):
-            if state not in checked_states:
+            state_key = state.board_string()
+            if state_key not in states_dict and state_key not in checked_states:
                 states.append(state)
+                states_dict[state_key] = True
                 state_depth = len(state.sequence)
                 if state_depth > max_search_depth:
                     max_search_depth = state_depth
+
 
 def solve_ast(state):
     checked_states = []
