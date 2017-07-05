@@ -122,10 +122,10 @@ def solve_bfs(state):
         if state_index < 0 or state_index >= len(states):
             raise ValueError("No solution found for state:\n {}".format(state))
         check_state = states[state_index]
-        check_count += 1
         state_index += 1
         if check_state.is_solved():
             return Output(check_state.sequence, check_count, max_search_depth)
+        check_count += 1
         for state in check_state.generate_possible_states():
             if state not in states:
                 states.append(state)
@@ -144,10 +144,10 @@ def solve_dfs(state):
         if len(states) < 1:
             raise ValueError("No solution found for state:\n {}".format(state))
         check_state = states.pop()
-        check_count += 1
         checked_states.append(check_state)
         if check_state.is_solved():
             return Output(check_state.sequence, check_count, max_search_depth)
+        check_count += 1
         for state in reversed(list(check_state.generate_possible_states())):
             if state not in checked_states:
                 states.append(state)
@@ -165,10 +165,10 @@ def solve_ast(state):
         if len(states) < 1:
             raise ValueError("No solution found for state:\n {}".format(state))
         check_state = states.pop()
-        check_count += 1
         checked_states.append(check_state)
         if check_state.is_solved():
             return Output(check_state.sequence, check_count, max_search_depth)
+        check_count += 1
         for state in check_state.generate_possible_states():
             if state not in checked_states:
                 states.append(state)
